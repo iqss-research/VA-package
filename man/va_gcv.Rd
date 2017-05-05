@@ -34,9 +34,9 @@ va.gcv(formula, data, nsymp.vec, n.subset=300, prob.wt=1,
     are located in a consecutive block in the data starting from
     \code{fever} and ending with \code{shortbreath}.
    Note that the current version requires the varible on the right hand
-   side of the formula, \texttt{death} in this example, to be present in
-   the \texttt{community} sample. If it is unknown in the
-   \texttt{community} sample, the user needs to create such variable
+   side of the formula, \code{death} in this example, to be present in
+   the \code{community} sample. If it is unknown in the
+   \code{community} sample, the user needs to create such variable
    with arbitrary numerical values. }
   \item{data}{a list of two datasets. The first is the hospital
     data, which contains the known cause of death for each
@@ -80,8 +80,8 @@ va.gcv(formula, data, nsymp.vec, n.subset=300, prob.wt=1,
   regression matrix is printed at each step of subsampling. It provides
   helpful information for user to choose the number of symptoms to
   subsample. It is recommended to print the size of the regression
-  matrix for different values of \texttt{nsymp} with a small size of
-  \texttt{n.subset}. }
+  matrix for different values of \code{nsymp} with a small size of
+  \code{n.subset}. }
 }
 \details{
   For details, please refer to "Verbal Autposy Methods with
