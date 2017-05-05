@@ -1,7 +1,6 @@
 ## this program implements the symptom select method
 ## discussed in King and Lu (2008b) WHO report
 
-require(Design, quietly=TRUE)
 require(quadprog, quietly=TRUE)
 
 va.validate<-function(formula,  data=list(hospital=NA, community=NA),

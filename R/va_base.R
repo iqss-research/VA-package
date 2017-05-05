@@ -1,10 +1,6 @@
 ## this program implements the method discussed in King and Lu(2008)
 ## details see Appendix of King & Lu (2008)
 
-# ???what do I need in Design?
-
-require(Design, quietly=TRUE)
-
 # We use quadprog:solve.QP in quad.constrain.R
 # for constrained linear optimization
 require(quadprog, quietly=TRUE)
