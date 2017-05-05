@@ -1,6 +1,8 @@
 # useDynLib(eiPack)
 
 importFrom("stats", "lm", "pt", "qnorm", "qt", "var", "vcov")
+import("quadprog")
+
 export(va, cod.est.base)
 export(va.gcv)
 export(va.validate)

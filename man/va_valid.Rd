@@ -9,11 +9,11 @@
   control for the false discovery rate, Bonferroni adjustment to the
   significance values can be sequentially applied to the models.
 }
-
+  
 
 \usage{ va.validate(formula,  data=list(hospital=NA, community=NA),
                nsymp=10,n.subset=300, nboot=1, boot.se=FALSE, method="quadOpt",
-                      fix=NA, bound=NA, prob.wt=1,
+                      fix=NA, bound=NA, prob.wt=1, 
                       printit=TRUE,print.reg.size=TRUE,
                       clean.method="ttest",
                       min.Symp=10, confidence=0.95, FDR=TRUE)
@@ -69,10 +69,10 @@
      of computing time. It is highly suggested to set
      \code{boot.se=FALSE} in \code{va_gcv}. Default=\code{FALSE}.}
       \item{method}{ A string specifying the computational procedure
-     used to estimate the cause specific mortality fractions. When
-     \code{method=''quadOpt''}, CSMF is estimated via constrained
-     quadratic programming. A subroutine (\code{Solve.QP}) from the
-     \code{quadprog} package is called to perform the constrained
+     used to estimate the cause specific mortality fractions. When 
+     \code{method=''quadOpt''}, CSMF is estimated via constrained 
+     quadratic programming. A subroutine (\code{Solve.QP}) from the 
+     \code{quadprog} package is called to perform the constrained 
      quadratic optimization task. When \code{method=``constrainLS''},
      CSMF is estimated via constrained least squares. The default method
      is \code{quadprog} as it is faster and more stable.}
@@ -91,13 +91,13 @@
      is \code{NA}, no such constrain is imposed. }
    \item{prob.wt}{A positive integer or a vector of weights that determines how
      likely a symptom is of being selected for a subset. When
-     \code{prob.wt} is a user input vector, it needs to be a vector
+     \code{prob.wt} is a user input vector, it needs to be a vector 
      of probabilities and sum up to 1. The length of
      \code{prob.wt} needs to be equal to the total number of symptoms.
-     When \code{prob.wt=1}, binomial weights which are proportion to
-     the inverse of variances of the each reported binary symptom variable.
-     When \code{prob.wt=0}, all symptoms will be equally selected.
-     The default is \code{1}.}
+     When \code{prob.wt=1}, binomial weights which are proportion to 
+     the inverse of variances of the each reported binary symptom variable.   
+     When \code{prob.wt=0}, all symptoms will be equally selected. 
+     The default is \code{1}.}    
   \item{printit}{Logical value. If \code{TRUE}, the progress of the
     estimation procedure will be printed on the screen.}
   \item{print.reg.size}{Logical value. If \code{TRUE}, the size of the
@@ -121,14 +121,14 @@
   }
   \item{FDR}{Logical value. If \code{TRUE}, a Bonferroni adjustment for
     multiple testing is applied sequentially to a collection of nested
-    models as more symptoms being removed. For details, see King and Lu (2008b).}
+    models as more symptoms being removed. For details, see King and Lu (2008b).} 
 }
 
 
 \details{
   For details, please refer to ''Designing Verbal Autopsy Analyses: A
   Report to the World Health Organization'' (King and Lu, 2008b) and
-  \url{http:\\gking.harvard.edu\va}
+  \url{http:\\gking.harvard.edu\va} 
 }
 
 \value{
@@ -147,16 +147,16 @@
   results based on all the bootstrapped samples (\code{cod.list.boot}
   and \code{Ps.list.boot}).
 }
-
+ 
 
 \references{
   King, Gary and Ying Lu. (2008) \dQuote{Verbal Autopsy Methods with
     Multiple Causes of Death}, 14(1), Statistical Science. Also
   available at \url{http:gking.harvard.edu/va}
   King, Gary and Ying Lu. (2008b) \dQuote{Designing Verbal Autopsy
-  Analyses: A Report to WHO}.
+  Analyses: A Report to WHO}. 
 
 }
 
 \keyword{verbal autopsy, CSMF}
-
+  

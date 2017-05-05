@@ -7,7 +7,7 @@ require(Design, quietly=TRUE)
 
 # We use quadprog:solve.QP in quad.constrain.R
 # for constrained linear optimization
-require(quadprog, quietly=TRUE) 
+require(quadprog, quietly=TRUE)
 
 
 ## va() is an interface function that calls cod.est.base()
@@ -17,12 +17,12 @@ require(quadprog, quietly=TRUE)
 ## if all responses=1 or 0,then delete
 
 
-##main function 
-## for parameters, see ?va 
+##main function
+## for parameters, see ?va
 
 ##??? do I need checkrow.names?
 va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
-             n.subset=300, method="quadOpt", fix=NA, bound=NA, 
+             n.subset=300, method="quadOpt", fix=NA, bound=NA,
              prob.wt=1,  boot.se=FALSE,
              nboot=300, printit=TRUE,
              print.reg.size=TRUE, checkrow.names=FALSE,
@@ -34,7 +34,7 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
 
   ## check if quadprog is loaded
   if (method=="quadOpt") {
-    tt<-require("quadprog")
+    tt<-requireNamespace("quadprog")
     if (!tt)
       stop("\n Require Quadractic Programming package 'quadprog'\n",
            call.=FALSE)
@@ -49,7 +49,7 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
   # information from inputs "fix" and "bound" and assign
   # the values to a list object "prior"
   # definitions of fFix and fBdd are at the end of this file
-  
+
   if (!is.na(fix)) {
     prior$fix <- fFix(fix)
   }
@@ -64,7 +64,7 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
   # "You have input priors :....
   #  to proceed, hit enter
   #  to modify the priors, type 0 "
-  
+
   print(prior)
 
 
@@ -88,7 +88,7 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
   else
     hospVars<-commVars<-c(rhsVars,lhsVars)
 
-  
+
   ## first column cause of death
   ## second to last symptoms
   hospD <- data[[1]][,hospVars] #key data matrix
@@ -107,11 +107,11 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
     colnames(commD)[[1]]<-rhsVars[[1]]
   }
 
-  
+
   q<-ncol(hospD)
   p<-nrow(hospD)
-  
-        
+
+
   ##check data: exit if
   ## any missing in causes of death (column 1)
   ## or, any missing in symptoms (column 2:q)
@@ -121,7 +121,7 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
   if (any(is.na(hospD[,1])))
     stop("\n Missing values found in the cause of death column\n",
          call.=FALSE)
-        
+
   if (any(is.na(hospD[,2:q])) || any(is.na(commD[,2:q])))
     stop("\n Missing valus found in symptom profiles\n", call.=FALSE)
 
@@ -134,22 +134,22 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
       (!all(as.matrix(commD[,2:q]) %in% c(0,1))))
     stop("\n All te symptoms should be coded 0,1 \n",call.=FALSE)
 
- 
+
   ##if user decides to supply prob.wt, it must be the same length as
   ##symptoms
-        
+
   if (length(prob.wt)>1)
     if (length(prob.wt)!=dim(hospD)[2]-1)
       stop("probability weights
   length must equal to number of symptoms in hosptial/community
           data\n")
-  
-        
+
+
   # obtain a complete list of the causes of death
   # note if a cod is not present in the hospital sample,
   # the estimate will be 0 in the communit sample.
   cod.names<-union(names(table(hospD[,1])), names(table(commD[,1])))
-        
+
   index.all<-cod.names
   index.all<- index.all[order(as.numeric(index.all))]
   # number of cods
@@ -171,7 +171,7 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
         tt<-table(temp[,i])
         n<-sum(tt)
         prob.wt[i-sta+1]<-tt[1]*tt[2]/n^2
-      } 
+      }
       prob.wt<-prob.wt/sum(prob.wt)
     } else {
       if (prob.wt==0) prob.wt<-NULL
@@ -183,8 +183,8 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
   ## Key estimation step
   ## cod.est.base estimate the COD in community sample
   ## based on  'n.subset' numbre of subsets, each of which has
-  ## randomly (with prob.wt) selected  nysmp number of symptoms 
-  
+  ## randomly (with prob.wt) selected  nysmp number of symptoms
+
     res0<- cod.est.base(hospital=hospD,community=commD,
                          n.subset=n.subset, nsymp=nsymp,
                          method=method,prior=prior,
@@ -202,20 +202,20 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
   # comp is a nboot by nd by 2 array saving the bootstrap results
   # if in community sample, true cod is know, it will be saved under "true"
   # "emp" saves the estimated cod based on each bootstrap sample.
-  if (boot.se) {  
+  if (boot.se) {
     comp<-array(0, dim=c(nboot, nd,2),
               dimnames=list(1:nboot, index.all, c("true", "emp")))
-    
+
   # s.fit will save the predicted P(S) for each bootstrapped
    # community sample
-    s.fit <- matrix(0, nboot, ncol(hospD)-1)        
+    s.fit <- matrix(0, nboot, ncol(hospD)-1)
 
 
   # start bootstrapping....
     for (t in 1:nboot){
       p1<-dim(commD)[1]
       p2<-dim(hospD)[1]
-     
+
       boot.good<-FALSE
 
       while (!boot.good && boot.se) {
@@ -232,12 +232,12 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
         # has any sympotms with variation, return to
         # draw another bootstrapped samples.
         boot.good<-!(any(colMeans(commD0[,-1])==1) ||
-                     any(colMeans(commD0[,-1])==0) || 
+                     any(colMeans(commD0[,-1])==0) ||
                      any(colMeans(hospD0[,-1])==1) ||
                      any(colMeans(hospD0[,-1])==0) )
       }
 
-      
+
       # estimate COD baed on bootstrapped samples
       res.boot<- cod.est.base(hospital=hospD0,community=commD0,
                          n.subset=n.subset, nsymp=nsymp,
@@ -245,7 +245,7 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
                          prob.wt=prob.wt,printit=printit,
                          print.reg.size=print.reg.size,
                          checkrow.names=checkrow.names)
-                
+
       cod.emp<-res.boot$est.CSMF
       cod.true<-res.boot$true.CSMF
 
@@ -255,7 +255,7 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
 
       # predict s.fit, or, P(S) for each boortrapped community sample
       # this can be used to calculate s.e of P(S)
-    
+
       if (predict.S==TRUE) {
         nd <- length(index.all)
         ns <- ncol(hosp)-1
@@ -269,18 +269,18 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
         # p^h(S|D) is estimated based on a bootstrapped sample of hospital
         # p(D) is the COD estimates based on one sets of bootrapped samples
         s.fit[t,]<-sd.mat%*%res$est.CSMF
-        
+
       }
 
-    
+
     cat(paste(t, "th bootstrap sampling done.\n\n"))
     }
   }  # end of bootstrap
-    
+
 
 
     ### outputs
-  
+
     out<-list()
 
     out$est.CSMF<-rep(0,nd)
@@ -297,7 +297,7 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
       out$true.CSMF[index.all %in% names(res0$true.CSMF)]<-res0$true.CSMF
       names(out$true.CSMF)<-index.all
     }
-    else 
+    else
       out$true.CSMF<-NA
 
    # estimated COD based on each subset of syptoms
@@ -307,17 +307,17 @@ va<-function(formula, data=list(hospital=NA, community=NA),nsymp=16,
 
   #? what is index.match?
     if (n.subset==1)
-      out$index.match<-res0$index.match   
+      out$index.match<-res0$index.match
 
-   
-   if (boot.se) {    
+
+   if (boot.se) {
         # estimated s.e. of out$est.CSMF
         out$CSMF.se<-apply(comp[,,2], 2, var)^0.5
         # bootstrap mean CSMF of the community sample if
         # truth is known
         out$true.CSMF.bootmean<-colMeans(comp[,,1])
         # estimated s.e. of true COD
-        # can be used as a benchmark s.e.in the COD distribution 
+        # can be used as a benchmark s.e.in the COD distribution
         out$true.bootse<-apply(comp[,,1], 2, var)^0.5
         # estimation result matrix nboot*nd*2
         out$res.boot<-comp
@@ -357,7 +357,7 @@ cod.est.base<-function(hospital,community, n.subset=300, nsymp=16,
         # the number of subsets need to be smaller than
         # the number of different subsets of nsymp symptoms
         # that can be drawn from the total (q-1) sysmptoms
-        # otherwise reutrn a warning 
+        # otherwise reutrn a warning
         if (n.subset>choose((q-1), nsymp))
           warning("n.subset is bigger than choose(q, nsymp)")
 
@@ -365,7 +365,7 @@ cod.est.base<-function(hospital,community, n.subset=300, nsymp=16,
         nd<-length(table(hospital[,1]))
 
         # d.res is an internal matrix that helps to monitor the code
-        # remove d.res this eventually 
+        # remove d.res this eventually
         d.res<-matrix(NA, n.subset, nd)
         colnames(d.res)<-names(table(hospital[,1]))
 
@@ -378,7 +378,7 @@ cod.est.base<-function(hospital,community, n.subset=300, nsymp=16,
                         # subset symptoms
                         index<-sample(2:q, nsymp, replace=FALSE, prob=prob.wt)
 
-                        
+
                         # h.probs contains P(S) and P(S|D) in hospital smaple
                           h.probs<-DISTgen(hospital[,c(1,index)], whichdata="hospital")
                         # c.probs contains P(S) and P(S|D) in community smaple
@@ -394,21 +394,21 @@ cod.est.base<-function(hospital,community, n.subset=300, nsymp=16,
 
                         #match the S components in both quantities.
                         # so Y and X have same rows
-                        
+
                           index.match<-intersect(row.names(y), row.names(x))
 
                       # y.use and x.use are subsets of P(S) and P^H(S|D)
                       # that have same sysmptom profiles
                       # note S is S_{sub} only
-                        
+
                          y.use<-y[row.names(y) %in% index.match]
                           x.ind<-row.names(x) %in% index.match
 
                         # P(S|D) tend to be sparser
                           x.use<-NULL
-                          if (!is.null(x.ind)) 
+                          if (!is.null(x.ind))
                            x.use<-x[x.ind,]
-                      
+
 
                         # not use
                           ratio.y<-length(y.use)/length(y)
@@ -417,7 +417,7 @@ cod.est.base<-function(hospital,community, n.subset=300, nsymp=16,
 
                         ## y.use and x.use need to be non empty
                         ## nrow in x.use needs to be larger than ncol of x.use
-                        
+
                           if (is.null(y.use) || is.null(x.use)
                               || is.null(dim(x.use))
                               || (!is.null(dim(x.use)) &&
@@ -426,27 +426,27 @@ cod.est.base<-function(hospital,community, n.subset=300, nsymp=16,
 
                             # if above condition is not met,
                             # go back to take a different smaple
-                            
+
                             sample.ok<-FALSE
                             counter<-counter+1
 
 
-                          
+
         # one main reason cause !sample.ok is due to sparsity
         # if sample.ok appears to be a problem more than twice
         # output a warning
            # if sample.ok appears to be a problem more than ten times
         # stop and suggest user to pick smaller nysmp (so P(S|D) can be
                             #less sparse
-                       
-                            
+
+
                             if (counter==2)
                               warning("sample could be too low
                                   for nsym\n")
                                   else
                                     if (counter==10)
                                       stop("please use a smaller nsymp\n", call.=FALSE)
-                            
+
                           }
                         if (method=="quadOpt") {
                           # estimate COD using quad.constrain
@@ -456,7 +456,7 @@ cod.est.base<-function(hospital,community, n.subset=300, nsymp=16,
                           if (length(coef)==1)
                             sample.ok<-FALSE
                         }
-                        
+
                       }
                 # user can monitor the sparsity of the X matrix, P(S|D) or x.use
                 if (print.reg.size) {
@@ -465,7 +465,7 @@ cod.est.base<-function(hospital,community, n.subset=300, nsymp=16,
                   print(dim(x.use))
                 }
 
-                
+
                 # estimate COD using ls.constrain
                 # note this method is not sensitive on data input
                 # it will estimate CODs regardless the sparsity of x.use
@@ -478,8 +478,8 @@ cod.est.base<-function(hospital,community, n.subset=300, nsymp=16,
                 # user can monitor the progress of hte code
                 if ((printit) & (subset==round(subset/n.subset,digits=1)*n.subset))
                   cat(paste(round(subset/n.subset, digits=1)*100, "percent done. \n"))
-          
-              }      
+
+              }
 
         # cod is the true COD in the community, if available
         # otherwise junk
@@ -501,9 +501,9 @@ cod.est.base<-function(hospital,community, n.subset=300, nsymp=16,
           est<-coef
         res<-list(est.CSMF=est, true.CSMF=c.probs$cod,
                   est.res=d.res, index.match=index.match)
-        
+
         return(res)
-        
+
       }
 
 
@@ -557,21 +557,20 @@ fFix <- function(fix) {
    }
 
 fBdd <- function(bound) {
-  
+
         getNamesB <- function(x)
           x[[2]]
         getValuesB <- function(x)
           c(x[[1]],x[[3]])
- 
+
         parseB <- function(x)
           sapply(x,strsplit,split ="<")
-      
+
         pbound <- sapply(bound, parseB)
         bdd <- matrix(as.numeric(unlist(sapply(pbound, getValuesB,
 simplify=FALSE))),
                       nrow=length(pbound), dimnames=list(sapply(pbound,
 getNamesB),c("lbd","ubd")))
-      
+
         bdd
 }
-

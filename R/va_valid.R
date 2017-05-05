@@ -7,7 +7,7 @@ require(quadprog, quietly=TRUE)
 va.validate<-function(formula,  data=list(hospital=NA, community=NA),
                nsymp=10,n.subset=300, nboot=1, boot.se=FALSE, method="quadOpt",
                       fix=NA, bound=NA,
-                      prob.wt=1, 
+                      prob.wt=1,
                       printit=TRUE,print.reg.size=TRUE,
                       clean.method="ttest",
                       min.Symp=10, confidence=0.95, FDR=TRUE){
@@ -15,7 +15,7 @@ va.validate<-function(formula,  data=list(hospital=NA, community=NA),
 if (min.Symp<nsymp) min.Symp<-nsymp
 
 if (method=="quadOpt") {
-    tt<-require("quadprog")
+    tt<-requireNamespace("quadprog")
     if (!tt)
       stop("\n Require Quadractic Programming package 'quadprog'\n",
            call.=FALSE)
@@ -31,7 +31,7 @@ if (method=="quadOpt") {
     prior$bdd <- fBdd(bound)
   }
   print(prior)
-  
+
   rhsVars<-all.vars(formula[[3]])
   lhsVars<-all.vars(formula[[2]])
   lhsVars<-dot(lhsVars,data[[1]])
@@ -61,7 +61,7 @@ if (method=="quadOpt") {
 
   q<-ncol(hospD)
   p<-nrow(hospD)
-  
+
   ##check data: exit if
   ## any missing in causes of death (column 1)
   ## or, any missing in symptoms (column 2:q)
@@ -71,7 +71,7 @@ if (method=="quadOpt") {
   if (any(is.na(hospD[,1])))
     stop("\n Missing values found in the cause of death column\n",
          call.=FALSE)
-        
+
   if (any(is.na(hospD[,2:q])) || any(is.na(commD[,2:q])))
     stop("\n Missing valus found in symptom profiles\n", call.=FALSE)
 
@@ -84,19 +84,19 @@ if (method=="quadOpt") {
       (!all(as.matrix(commD[,2:q]) %in% c(0,1))))
     stop("\n All te symptoms should be coded 0,1 \n",call.=FALSE)
 
- 
+
   ##if user decides to supply prob.wt, it must be the same length as
   ##symptoms
-        
+
   if (length(prob.wt)>1)
     if (length(prob.wt)!=dim(hospD)[2]-1)
       stop("probability weights
   length must equal to number of symptoms in hosptial/community
           data\n")
-  
-        
+
+
   cod.names<-union(names(table(hospD[,1])), names(table(commD[,1])))
-        
+
   index.all<-cod.names
   index.all<- index.all[order(as.numeric(index.all))]
   nd <- length(index.all)
@@ -112,7 +112,7 @@ if (method=="quadOpt") {
         tt<-table(temp[,i])
         n<-sum(tt)
         prob.wt[i-sta+1]<-tt[1]*tt[2]/n^2
-      } 
+      }
       prob.wt<-prob.wt/sum(prob.wt)
     } else {
       if (prob.wt==0) prob.wt<-NULL
@@ -131,7 +131,7 @@ cod.emp<-cod.true<-rep(0,nd)
     cod.emp[index.all %in% names(res$est.CSMF)]<-res$est.CSMF
     cod.true[index.all %in% names(res$true.CSMF)]<-res$true.CSMF
 
-    ##P(S|D) in hospital 
+    ##P(S|D) in hospital
     sprob.h<-matrix(0, nd, ns)
     for (i in 1:nd)
       sprob.h[i,]<-colMeans(hospD[hospD[,1]==index.all[i],-1])
@@ -142,22 +142,22 @@ if (nboot==1) boot.se<-FALSE
 if (boot.se) {
       comp<-matrix(0, nboot, nd)
 
-      s.fit <- e.boot<-matrix(0, nboot, ncol(hospD)-1)        
+      s.fit <- e.boot<-matrix(0, nboot, ncol(hospD)-1)
       for (t in 1:nboot){
         p1<-dim(commD)[1]
         p2<-dim(hospD)[1]
-        
+
         boot.good<-FALSE
         while (!boot.good) {
-          
+
           index.boot1<-sample(1:p1, p1, replace=TRUE)
           index.boot2<-sample(1:p2, p2, replace=TRUE)
-    
+
           commD0<-commD[index.boot1,]
           hospD0<-hospD[index.boot2,]
 
           boot.good<-!(any(colMeans(commD0[,-1])==1) ||
-                     any(colMeans(commD0[,-1])==0) || 
+                     any(colMeans(commD0[,-1])==0) ||
                      any(colMeans(hospD0[,-1])==1) ||
                      any(colMeans(hospD0[,-1])==0) )
 
@@ -207,7 +207,7 @@ cat("clean.method=", clean.method, "\n")
 ##t test
     if (clean.method=="ttest") {
       ind<-ttest(x=e0, prob=1-(1-confidence)/2, df=ns-1)
-      
+
     }
 
 if (clean.method=="ztest") {
@@ -247,43 +247,43 @@ index.S<-NULL
                        checkrow.names=FALSE, logfile="junk.txt")
         cod.emp<-rep(0,nd)
         cod.emp[index.all %in% names(res$est.CSMF)]<-res$est.CSMF
-        
+
         if (boot.se) {
           comp<-matrix(0, nboot, nd)
 
-          s.fit <- e.boot<-matrix(0, nboot, length(index.S))        
-  
+          s.fit <- e.boot<-matrix(0, nboot, length(index.S))
+
           for (t in 1:nboot){
 
-            
+
             p1<-dim(commD)[1]
             p2<-dim(hospD)[1]
 
-            
+
             boot.good<-FALSE
             while (!boot.good) {
-          
+
               index.boot1<-sample(1:p1, p1, replace=TRUE)
               index.boot2<-sample(1:p2, p2, replace=TRUE)
-            
+
               commD0<-commD[index.boot1,c(1,(index.S+1))]
               hospD0<-hospD[index.boot2,c(1,(index.S+1))]
-              
+
               boot.good<-!(any(colMeans(commD0[,-1])==1) ||
-                     any(colMeans(commD0[,-1])==0) || 
+                     any(colMeans(commD0[,-1])==0) ||
                      any(colMeans(hospD0[,-1])==1) ||
                      any(colMeans(hospD0[,-1])==0) )
-            
+
               if (boot.good) {
                 res0<- try(cod.est.base(hospital=hospD0,community=commD0,
                        n.subset=n.subset, nsymp=nsymp,
                             method=method,prior=prior,
                        prob.wt=prob.wt[index.S],printit=FALSE,
                        print.reg.size=FALSE,
-                       checkrow.names=FALSE, logfile="junk.txt"),TRUE) 
+                       checkrow.names=FALSE, logfile="junk.txt"),TRUE)
               if (length(res0)==1) boot.good<-FALSE }
             }
-            
+
 #            print(res0$est.CSMF)
             comp[t,index.all %in% names(res0$est.CSMF)]<-res0$est.CSMF
             ns0<-ncol(hospD0)-1
@@ -300,11 +300,11 @@ index.S<-NULL
           }
         }
 
-        
+
         res.out[[j]]<-cod.emp
         res.pred[[j]]<-t(sprob.h)%*%cod.emp
         delete.list[[j]]<-out.list
-        
+
 if (boot.se) {
  hatS.var[[j]]<-apply(s.fit,2, var)
         e.var[[j]]<-apply(e.boot,2,var)
@@ -322,7 +322,7 @@ if (boot.se) {
           ind<-ztest(x=ee, sig2=apply(e.boot,2,var), prob=1-(1-confidence)/2)
           cat("\n ztest\n")
 }
-        
+
         ## q test
         if (clean.method=="qtest") {
           ind<-qtest(ee, prob=1-(1-confidence)/2, size=length(ee))
@@ -330,7 +330,7 @@ if (boot.se) {
 
 
         clean<-TRUE
-        
+
         if (any(ind)) {
         out.list<-c(out.list, index.S[abs(ee)==max(abs(ee))])
         index.S<-index.S[abs(ee)!=max(abs(ee))]
@@ -356,10 +356,10 @@ if (nr>=2) {
   tscore[k]<-max(abs(e0-mean(e0))/(var(e0)^0.5))
   }
 }
- 
+
 tvalue<-qt(1-(1-confidence)/(1:nr), (ns-1):(ns-nr))
 
-} 
+}
 
 
 if (boot.se) {
@@ -375,7 +375,7 @@ if (FDR & length(delete.list)>=1) {
     out$FDR.delete.list<-delete.list[[k]]
   }
 
-  
+
 
 
 }
@@ -396,7 +396,7 @@ ztest<-function(x, sig2, prob) {
 x<-abs(x)/(sig2^0.5)
 return(x>qnorm(prob))
 }
-  
+
 
 qtest<-function(x, size, prob) {
   qtable<-matrix(0, 6,3)
@@ -408,7 +408,7 @@ qtest<-function(x, size, prob) {
   qtable[6,]<-c(0.260, 0.298, 0.372)  #size=30
 
   nn<-length(x)
-  
+
   qstat.low<-(x[rank(x)==2]-x[rank(x)==1])/(max(x)-min(x))
     qstat.high<-(x[rank(x)==nn]-x[rank(x)==(nn-1)])/(max(x)-min(x))
 
@@ -420,7 +420,7 @@ print(x)
     cat("qstat.high=", qstat.high, "\n")
     cat("qstat=", qstat, "\n")
     cat("ind=", ind, "\n")
-  
+
   if (prob==0.90) k<-1
   if (prob==0.95) k<-2
   if (prob==0.99) k<-3
@@ -459,4 +459,3 @@ if (method=="ttest") {
 if (method=="qtest")
   return(qtest(x,size,prob))
 }
-

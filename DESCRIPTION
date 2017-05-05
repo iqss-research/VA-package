@@ -1,13 +1,16 @@
 Package: VA
-Version: 0.0-2
-Date: 2006-05-22
-Title: VA: Software for Analyzing Verbal Autopsy Data
-Author: Gary King <king@harvard.edu>, 
-        Ying Lu <ylu@iq.harvard.edu>
-Maintainer: Ying Lu <ylu@iq.harvard.edu>
+Version: 0.9-2.13
+Date: 2017-05-05
+Title: Verbal Autopsies
+Author: Gary King <king@harvard.edu>,
+        Ying Lu <ylu@colorado.edu>
+Maintainer: Ying Lu <ylu@colorado.edu>
 Depends: R (>= 2.2.1)
-Description: va is a R package that estimates the cause-specific 
-              mortality rates based on verbal autopsy data. 
-License: Creative Commons Attribution-Noncommercial-No Derivative Works 3.0, for academic use only
-URL: http://gking.harvard.edu/va/
-RoxygenNote: 6.0.1
+Imports:
+    quadprog
+Description: VA is a R package that estimates the cause-specific 
+        mortality rates based on verbal autopsy data.
+License: Creative Commons Attribution-Noncommercial-No Derivative Works
+        3.0, for academic use only
+URL: http://gking.harvard.edu/
+Packaged: 2012-02-26 21:46:12 UTC; rbuild2
