@@ -1,0 +1,7 @@
+# useDynLib(eiPack)
+
+export(va, cod.est.base)
+export(va.gcv)
+export(va.validate)
+
+# S3method(print, eiReg)

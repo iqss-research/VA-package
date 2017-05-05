@@ -1,0 +1,91 @@
+<html>
+<head>
+<title>VA Software Website</title>
+<script language='Javascript' src='/gking.js'></script></HEAD>
+
+<BODY><script language="Javascript">displayHeader("VA: Software for Analyzing Verbal Autopsy Data")</script>
+
+<a href="http://gking.harvard.edu/">Gary King</a>, 
+<a href="http://iq.harvard.edu/People/people.php?info=1229&sub=6">Ying Lu</a>
+<br /><br />
+<!-- rbuild: replace 'Version:' '</b>' version -->
+<b>Version:1.0</b>
+
+<table border='0' cellpadding='0' cellspacing='8'><tr><td valign='top'
+width='180'> <p !style="float:left; width: 150; margin: 1.5em;"> <img
+src="deathcertif.jpg" width="200"  /></a> <br /><small>
+</small></p>
+
+</td><td valign='top'>
+
+<p>VA is an easy-to-use R program that automates the analysis of
+  verbal autopsy data.  These data are widely used for estimating
+  cause-specific mortality in areas without medical death
+  certification.  Data on symptoms reported by caregivers along with
+  the cause of death are collected from a medical facility, and the
+  cause-of-death distribution is estimated in the population where
+  only symptom data are available.  Current approaches analyze only
+  one cause at a time, involve assumptions judged difficult or
+  impossible to satisfy, and require expensive, time consuming, or
+  unreliable physician reviews, expert algorithms, or parametric
+  statistical models.  By generalizing current approaches to analyze
+  multiple causes, <a href="http://gking.harvard.edu/files/abs/vamc-abs.shtml">King and Lu
+  (2008)</a>  show how most of difficult assumptions
+  underlying existing methods can be dropped.  These generalizations,
+  which we implement here,
+  also make physician review, expert algorithms, and parametric
+  statistical assumptions unnecessary.  While no method of analyzing
+  verbal autopsy data can give accurate estimates in all
+  circumstances, the procedure offered is conceptually simpler, less
+  expensive, more general, as or more replicable, and easier to use in
+  practice.
+  </p>
+
+  <p>More generally, the software takes as input a multicategory
+  variable <em>D</em>, and a set of dichotomous variables
+  <em><strong>S</strong></em> (cause of Death and Symptoms,
+  respectively, in verbal autopsy applications).  Both variables exist
+  in one data set (a hospital in the application) but only
+  <em><strong>S</strong></em> exists in the
+  population of interest.  The goal of the procedure is to estimate
+  the probability distribution (or histogram) of <em>D</em> in the
+  population of interest.
+  
+<ul>
+<li>Gary King and Ying Lu. <span class="bg">Verbal Autopsy Methods with Multiple
+    Causes of Death</span> (<span class="bg">Abstract:</span> <a
+    href="http://gking.harvard.edu/files/abs/vamc-abs.shtml">HTML</a> | <span
+    class="bg">Paper:</span> <a href="http://gking.harvard.edu/files/vamc.pdf">PDF</a>)</li>
+    
+<li>To install, sign on to R, and type:
+    install.packages(c("Design", "quadprog"))<br>
+    install.packages("VA",repos="http://r.iq.harvard.edu", type="source")</li>
+
+<li>For documentation, from R, type library(VA), and then ?va,
+    or download <a href="http://gking.harvard.edu/va/docs/va.pdf">PDF</a>
+
+<li>All questions, bugs and requests: Mailing List, <a
+href="http://lists.hmdc.harvard.edu/index.cgi?info=va" target="gkingext">[Un]Subscribe</a>,
+or <a href="http://lists.hmdc.harvard.edu/lists/va/" target="gkingext">Browse/Search
+Archives</a></li>
+
+<li>
+<span class="orange"><strong>License:</strong></span> Creative Commons
+Attribution- Noncommercial-No Derivative Works 3.0 License, for
+academic use only.  A commerical (and industrial strength) version
+has been built by, and licensed to, <a
+href="http://crimsonhexagon.com">Crimson Hexagon</a>
+</li>
+
+<li><a href="http://gking.harvard.edu/va/" target="ChangeDetectionWiz"
+    onClick="doChangeDetectionPopup()"> Track VA changes</a></li>
+</ul>
+
+</td>
+</tr>
+</table>    
+    
+   
+
+<script language="Javascript">displayFooter()</script></BODY>
+</html>
