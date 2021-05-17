@@ -9,6 +9,6 @@ Data on symptoms reported by caregivers along with the cause of death are collec
 
 More generally, the software takes as input a multicategory variable D, and a set of dichotomous variables S (cause of Death and Symptoms, respectively, in verbal autopsy applications). Both variables exist in one data set (a hospital in the application) but only S exists in the population of interest. The goal of the procedure is to estimate the probability distribution (or histogram) of D in the population of interest.
 
-For more information, see Gary King and Ying Lu. Verbal Autopsy Methods with Multiple Causes of Death (Abstract: <a href="/files/abs/vamc-abs.shtml">HTML</a>  | Paper: <a href="/files/gking/files/vamc.pdf">PDF</a>) 
+For more information, see Gary King and Ying Lu. Verbal Autopsy Methods with Multiple Causes of Death (Abstract: <a href="garyking.org/files/abs/vamc-abs.shtml">HTML</a>  | Paper: <a href="garyking.org/files/gking/files/vamc.pdf">PDF</a>) 
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/3.0/us/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/us/">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 United States License</a>.
